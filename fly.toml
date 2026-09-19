@@ -1,36 +1,60 @@
-# Fly config for the shared OpenClaw worker image.
+# Fly Machines config for the OpenClaw multi-tenant worker.
 #
-# Without this file, `fly deploy` has no app or build context: it resolves the Dockerfile against the
-# PARENT directory and fails with "dockerfile /Users/.../Developer/Dockerfile not found" (hit 2026-09-14).
-# Per-account workers (claw-acct-*) do not deploy from here — they are Machines started from the image
-# this app publishes, so publishing a new image is step one and moving each machine onto it is step two.
-app = "clawhire-openclaw-gateway"
+# First deploy, in your own Fly organisation:
+#   fly launch --copy-config --no-deploy        # then set `app` below to a name of your own (Fly app names are global)
+#   fly volumes create clawdata --size 10       # ALL agent state lives on this volume at /data
+#   fly secrets set OPENCLAW_API_KEY=$(openssl rand -hex 32) \
+#                   TENANT_TOKEN_BROKER_URL=https://<your-control-plane>/api/internal/token-broker \
+#                   TENANT_TOKEN_BROKER_KEY=$(openssl rand -hex 32) \
+#                   OPENROUTER_API_KEY=...
+#   fly deploy
+#
+# Auto start/stop keeps an idle worker near $0. Keep VM size and count under MONTHLY_COST_CAP_USD.
+
+app = "my-openclaw-worker"
 primary_region = "iad"
 
 [build]
   dockerfile = "Dockerfile"
 
-# The worker keeps ALL agent state on this volume: DATA_ROOT=/data/agents and OPENCLAW_HOME=/data/openclaw
-# (see Dockerfile). Omitting this section is NOT cosmetic — `fly deploy` offers to detach the volume and
-# replace the machine, and answering yes leaves the worker running with an empty /data and zero agents.
-# That happened on 2026-09-14. The volume survives detachment, so re-attaching it restores the state.
-[mounts]
-  source = "clawdata"
-  destination = "/data"
-
 [env]
   PORT = "8000"
+  OPENCLAW_ENGINE = "openclaw"
+  WORKER_TENANCY_MODE = "pooled"
+  DATA_ROOT = "/data/agents"
+  OPENCLAW_HOME = "/data/openclaw"
+  MONTHLY_COST_CAP_USD = "300"
+  COST_CAP_ENFORCE = "true"
+  LOG_LEVEL = "info"
+
+# The worker keeps ALL agent state on this volume (DATA_ROOT and OPENCLAW_HOME above).
+# This section is not cosmetic: without it `fly deploy` can detach the volume and start the
+# worker with zero agents.
+[[mounts]]
+  source = "clawdata"
+  destination = "/data"
 
 [http_service]
   internal_port = 8000
   force_https = true
-  auto_stop_machines = false
+  auto_stop_machines = "stop"
   auto_start_machines = true
-  min_machines_running = 1
+  min_machines_running = 0
+
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 20
+    hard_limit = 40
 
 [[http_service.checks]]
   interval = "30s"
-  timeout = "5s"
-  grace_period = "20s"
+  timeout = "10s"
+  grace_period = "60s"
   method = "GET"
   path = "/health"
+
+# The adapter is the only long-lived process, so a small VM is enough to start. Scale per your cap.
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"
+  cpus = 1

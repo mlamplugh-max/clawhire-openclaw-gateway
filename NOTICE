@@ -1,5 +1,9 @@
 Copyright (c) 2026 ClawHire AI Inc.
 
 This software is licensed under the Elastic License 2.0 (see LICENSE).
+
+"ClawHire" and the ClawHire logo are trademarks of ClawHire AI Inc. The licence grants no right
+to use them; any use of the name or logo is subject to applicable law.
+
 OpenClaw (https://github.com/openclaw/openclaw) is a separate project by the OpenClaw Foundation,
 MIT licensed, installed at build time as a dependency; it is not redistributed in this repository.

@@ -140,7 +140,7 @@ The broker endpoint is yours to implement; the worker only defines the request i
 
 ## Deploying
 
-The image is a two-stage Docker build on `node:22-bookworm-slim`: the adapter is compiled, then the real OpenClaw CLI is installed globally at a pinned version. A `fly.toml` is included for Fly Machines.
+The image is a two-stage Docker build on `node:22-bookworm-slim`: the adapter is compiled, then the real OpenClaw CLI is installed globally at a pinned version. A `fly.toml` is included at the repository root; set `app` to a name of your own, since Fly app names are global.
 
 ```bash
 fly launch --copy-config --no-deploy   # first time, in your own Fly org
@@ -170,6 +170,8 @@ The full text is in [LICENSE](./LICENSE). This is a source-available licence, no
 ## Hosted by ClawHire
 
 If you would rather not run any of this yourself: **[ClawHire](https://clawhire.ai)** is the hosted version, with role-trained AI employees that learn from every job, per-state law and industry knowledge, an approval gate on every outbound action, and a readable work log, on top of exactly this runtime. The first employee is $99 a month with a 30-day free trial (card on file).
+
+**Agencies and consultants** running OpenClaw for clients: ClawHire has a [partner programme](https://clawhire.ai/partners) for firms that would rather resell hosted AI employees than operate the runtime themselves.
 
 Questions, issues and pull requests are welcome here. For the hosted service, [clawhire.ai/contact](https://clawhire.ai/contact).
 
