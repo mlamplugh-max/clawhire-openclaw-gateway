@@ -1,0 +1,5 @@
+Copyright (c) 2026 ClawHire AI Inc.
+
+This software is licensed under the Elastic License 2.0 (see LICENSE).
+OpenClaw (https://github.com/openclaw/openclaw) is a separate project by the OpenClaw Foundation,
+MIT licensed, installed at build time as a dependency; it is not redistributed in this repository.

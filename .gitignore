@@ -1,0 +1,22 @@
+# Dependencies & build output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Secrets — NEVER commit. Worker key + tenant tokens live in Fly secrets / runtime broker only.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets.json
+
+# Runtime/agent state (per-tenant sandbox data must never be committed)
+data/
+agent-state/
+sandbox-roots/
+*.log
+
+# Local backups / scratch
+_legacy_stub_backup/
+tmp/

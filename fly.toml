@@ -1,0 +1,36 @@
+# Fly config for the shared OpenClaw worker image.
+#
+# Without this file, `fly deploy` has no app or build context: it resolves the Dockerfile against the
+# PARENT directory and fails with "dockerfile /Users/.../Developer/Dockerfile not found" (hit 2026-09-14).
+# Per-account workers (claw-acct-*) do not deploy from here — they are Machines started from the image
+# this app publishes, so publishing a new image is step one and moving each machine onto it is step two.
+app = "clawhire-openclaw-gateway"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+# The worker keeps ALL agent state on this volume: DATA_ROOT=/data/agents and OPENCLAW_HOME=/data/openclaw
+# (see Dockerfile). Omitting this section is NOT cosmetic — `fly deploy` offers to detach the volume and
+# replace the machine, and answering yes leaves the worker running with an empty /data and zero agents.
+# That happened on 2026-09-14. The volume survives detachment, so re-attaching it restores the state.
+[mounts]
+  source = "clawdata"
+  destination = "/data"
+
+[env]
+  PORT = "8000"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[http_service.checks]]
+  interval = "30s"
+  timeout = "5s"
+  grace_period = "20s"
+  method = "GET"
+  path = "/health"

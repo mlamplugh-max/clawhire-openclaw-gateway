@@ -1,0 +1,37 @@
+{
+  "name": "clawhire-openclaw-gateway",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Multi-tenant OpenClaw worker: per-agent OS sandboxes, per-tenant scoping, per-tenant OAuth token brokering and cost guardrails behind a small REST contract. The runtime behind ClawHire AI employees.",
+  "license": "Elastic-2.0",
+  "private": true,
+  "main": "dist/server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "dev": "OPENCLAW_ENGINE=stub tsx watch src/server.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test --import tsx test/*.test.ts",
+    "contract-test": "OPENCLAW_ENGINE=stub node --test --import tsx test/contract.test.ts"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.21.3",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.0",
+    "@types/ws": "^8.18.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mlamplugh-max/clawhire-openclaw-gateway.git"
+  },
+  "homepage": "https://clawhire.ai"
+}
