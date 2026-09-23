@@ -1,5 +1,7 @@
 # clawhire-openclaw-gateway
 
+[![CI](https://github.com/mlamplugh-max/clawhire-openclaw-gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/mlamplugh-max/clawhire-openclaw-gateway/actions/workflows/ci.yml) ![Licence: Elastic 2.0](https://img.shields.io/badge/licence-Elastic_2.0-blue) ![Node 20+](https://img.shields.io/badge/node-%3E%3D20-brightgreen)
+
 **Run [OpenClaw](https://github.com/openclaw/openclaw) agents for many companies on one worker, safely.**
 
 A small Node worker that wraps the real `openclaw` CLI and adds what a multi-tenant deployment needs: a private OS sandbox per agent, hard per-tenant scoping of data and memory, per-tenant OAuth token brokering so the worker never holds long-lived customer credentials, and cost telemetry with a monthly cap. It speaks a frozen REST contract (`/agents/*`), ships with a stub engine so the contract is testable without an LLM, and deploys as one Docker image to Fly Machines.
@@ -24,7 +26,7 @@ This is the runtime behind [ClawHire](https://clawhire.ai)'s hosted AI employees
 - [Deploying](#deploying)
 - [What this is not](#what-this-is-not)
 - [Licence](#licence)
-- [Hosted by ClawHire](#hosted-by-clawhire)
+- [Maintained by ClawHire](#maintained-by-clawhire)
 
 ---
 
@@ -155,7 +157,7 @@ Any Docker host works the same way: run the image with `/data` mounted and the v
 
 ## What this is not
 
-This repository is the **runtime**, not the product. It contains no role prompts, no skills library, no memory or learning layer, no approval workflow, no user interface, no billing, and no employee catalogue. It runs whatever agents your control plane registers with it. If you want the parts around it, that is what the hosted service is for.
+This repository is the **runtime**, not the product. It contains no role prompts, no skills library, no memory or learning layer, no approval workflow, no user interface, no billing, and no employee catalogue. It runs whatever agents your control plane registers with it.
 
 ## Licence
 
@@ -167,13 +169,11 @@ This repository is the **runtime**, not the product. It contains no role prompts
 
 The full text is in [LICENSE](./LICENSE). This is a source-available licence, not an OSI-approved open-source licence; if that matters for your use, please read it. OpenClaw, the dependency, is MIT.
 
-## Hosted by ClawHire
+## Maintained by ClawHire
 
-If you would rather not run any of this yourself: **[ClawHire](https://clawhire.ai)** is the hosted version, with role-trained AI employees that learn from every job, per-state law and industry knowledge, an approval gate on every outbound action, and a readable work log, on top of exactly this runtime. The first employee is $99 a month with a 30-day free trial (card on file).
+This worker is maintained by [ClawHire AI Inc.](https://clawhire.ai) and runs in production behind its hosted AI-employee service, where every customer's employees are OpenClaw agents on exactly this runtime. The role training, learning layer, approval workflow and interface belong to that service, not to this repository, which is why they are absent here.
 
-**Agencies and consultants** running OpenClaw for clients: ClawHire has a [partner programme](https://clawhire.ai/partners) for firms that would rather resell hosted AI employees than operate the runtime themselves.
-
-Questions, issues and pull requests are welcome here. For the hosted service, [clawhire.ai/contact](https://clawhire.ai/contact).
+Agencies running OpenClaw for their own clients can read about ClawHire's [partner programme](https://clawhire.ai/partners). Questions, issues and pull requests about the worker itself are welcome here; see [CONTRIBUTING.md](./CONTRIBUTING.md) and [SECURITY.md](./SECURITY.md).
 
 ---
 
